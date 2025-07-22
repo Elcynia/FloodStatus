@@ -124,7 +124,7 @@ function KoreaMap() {
 
   const fetchAllRiverDataOnce = useCallback(async () => {
     const API_KEY = import.meta.env.VITE_OPEN_API;
-    const baseUrl = `http://openapi.seoul.go.kr:8088/${API_KEY}/json/ListRiverStageService/1/50`;
+    const baseUrl = `/api/${API_KEY}/json/ListRiverStageService/1/50`;
 
     // 하천 목록
     const allRivers = [
