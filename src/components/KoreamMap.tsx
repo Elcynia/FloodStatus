@@ -529,7 +529,7 @@ function KoreaMap() {
 
         {/* (영역 클릭시) 상세 정보 */}
         {selectedDistrict && (
-          <div className='w-full lg:min-w-auto lg:max-w-auto max-h-96 lg:max-h-[600px] overflow-y-auto p-4 sm:p-5 border border-gray-300 rounded-lg bg-white shadow-sm sm:mx-0'>
+          <div className='w-full lg:min-w-auto lg:max-w-auto max-h-96 lg:max-h-[700px] overflow-y-auto p-4 sm:p-5 border border-gray-300 rounded-lg bg-white shadow-sm sm:mx-0'>
             <div className='flex justify-between items-center mb-4'>
               <h3 className='m-0 text-base sm:text-lg font-semibold text-gray-700'>{selectedDistrict.name}</h3>
               <button
