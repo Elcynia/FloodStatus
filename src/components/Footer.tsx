@@ -1,5 +1,4 @@
 import { Mail, AlertTriangle } from 'lucide-react';
-import { Link } from 'react-router';
 export default function Footer() {
   const CURRENT_YEAR = new Date().getFullYear();
 
