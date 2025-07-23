@@ -123,9 +123,8 @@ function KoreaMap() {
   }, []);
 
   const fetchAllRiverDataOnce = useCallback(async () => {
-    const API_KEY = import.meta.env.VITE_OPEN_API;
     const BACKEND = import.meta.env.VITE_BACKEND_API;
-    const baseUrl = `${BACKEND}/api/${API_KEY}/json/ListRiverStageService/1/50`;
+    const baseUrl = `${BACKEND}/api/river-stage`;
 
     // 하천 목록
     const allRivers = [
