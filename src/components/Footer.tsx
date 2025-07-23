@@ -52,11 +52,15 @@ export default function Footer() {
             </div>
           </div>
 
-          {/* 버전 */}
-          <div className='flex items-center space-x-4'>
+          {/* 커피 후원 */}
+          <div>
             <Link to='https://www.buymeacoffee.com/elcynia' target='_blank'>
               <img src='https://img.buymeacoffee.com/button-api/?text=커피 한 잔 후원하기&emoji=☕&slug=elcynia&button_colour=FFDD00&font_colour=000000&font_family=Poppins&outline_colour=000000&coffee_colour=ffffff' />
             </Link>
+          </div>
+
+          {/* 버전 */}
+          <div className='flex items-center space-x-4'>
             <div className='px-4 py-3.5 bg-gray-800 text-white rounded-lg text-sm font-medium'>
               <span className='flex items-center space-x-2'>
                 <span>v1.0.0</span>
