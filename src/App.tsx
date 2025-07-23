@@ -1,7 +1,7 @@
-import KoreaMap from './components/KoreamMap';
+import FloodMap from './components/FloodMap';
 
 function App() {
-  return <KoreaMap />;
+  return <FloodMap />;
 }
 
 export default App;

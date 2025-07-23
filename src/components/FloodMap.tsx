@@ -32,7 +32,7 @@ type TopoJsonData = any;
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 type GeoFeatureCollection = any;
 
-function KoreaMap() {
+export default function FloodMap() {
   const [geoData, setGeoData] = useState<TopoJsonData | null>(null);
   const [selectedDistrict, setSelectedDistrict] = useState<SelectedDistrict | null>(null);
   const [realTimeRiverData, setRealTimeRiverData] = useState<RiverGroupData[] | null>(null);
@@ -501,7 +501,7 @@ function KoreaMap() {
                 <h4 className='text-sm sm:text-base font-bold text-gray-800'>하천 수위 위험도 범례</h4>
               </div>
 
-              <div className='grid grid-cols-3 lg:grid-cols-5 gap-3'>
+              <div className='grid grid-cols-2 lg:grid-cols-5 gap-3'>
                 <div className='flex items-center gap-2 p-2 rounded-lg bg-red-50 border border-red-100 hover:bg-red-100 transition-colors duration-200'>
                   <div className='w-4 h-4 bg-red-600 rounded-full shadow-sm border-2 border-white'></div>
                   <div className='flex gap-2'>
@@ -760,5 +760,3 @@ function KoreaMap() {
     </>
   );
 }
-
-export default KoreaMap;
