@@ -42,6 +42,7 @@ export default function FloodMap() {
   const [riverDataCache, setRiverDataCache] = useState<{ [key: string]: RiverStation[] }>({});
   const [dimensions, setDimensions] = useState({ width: 800, height: 600 });
   const svgRef = useRef<SVGSVGElement>(null);
+  const detailsRef = useRef<HTMLDivElement>(null);
 
   // 반응형 지도 크기 설정
   useEffect(() => {
@@ -423,6 +424,11 @@ export default function FloodMap() {
           // 하천 데이터
           fetchRealTimeRiverData(districtName);
 
+          // (모바일) 영역 클릭시 자동 스크롤
+          if (window.innerWidth < 1024 && detailsRef.current) {
+            detailsRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          }
+
           // 선택된 구역 하이라이트
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
           svg.selectAll('path').attr('fill', (pathData: any) => {
@@ -553,7 +559,10 @@ export default function FloodMap() {
 
           {/* (영역 클릭시) 상세 정보 */}
           {selectedDistrict && (
-            <div className='w-full lg:min-w-auto lg:max-w-auto lg:max-h-[calc(900px-15px)] overflow-y-auto bg-gradient-to-br from-white to-gray-50 border border-gray-200 rounded-2xl shadow-xl sm:mx-0 '>
+            <div
+              ref={detailsRef}
+              className='w-full lg:min-w-auto lg:max-w-auto lg:max-h-[calc(900px-15px)] overflow-y-auto bg-gradient-to-br from-white to-gray-50 border border-gray-200 rounded-2xl shadow-xl sm:mx-0 '
+            >
               <div className='bg-gradient-to-r from-sky-600 to-sky-700 p-4 sm:p-6 rounded-t-2xl'>
                 <div className='flex justify-between items-center '>
                   <div className='flex items-center gap-3 '>
