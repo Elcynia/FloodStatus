@@ -9,7 +9,7 @@ export default function Header() {
           <Link to='/' className='flex items-center group'>
             <div className='p-2 bg-white/10 rounded-lg mr-3 group-hover:bg-white/20 transition-all duration-200'>
               <div className='relative cursor-pointer'>
-                <img src='/river.png' alt='FloodGuard Logo' className='h-8 w-8' />
+                <img src='/river.png' alt='FloodStatus Logo' className='h-8 w-8' />
               </div>
             </div>
             <div className='flex flex-col cursor-pointer'>
