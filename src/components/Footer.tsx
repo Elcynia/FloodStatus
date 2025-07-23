@@ -54,9 +54,12 @@ export default function Footer() {
 
           {/* 커피 후원 */}
           <div>
-            <Link to='https://www.buymeacoffee.com/elcynia' target='_blank'>
-              <img src='https://img.buymeacoffee.com/button-api/?text=커피 한 잔 후원하기&emoji=☕&slug=elcynia&button_colour=FFDD00&font_colour=000000&font_family=Poppins&outline_colour=000000&coffee_colour=ffffff' />
-            </Link>
+            <a href='https://www.buymeacoffee.com/elcynia' target='_blank' rel='noopener noreferrer'>
+              <img
+                src='https://img.buymeacoffee.com/button-api/?text=커피 한 잔 후원하기&emoji=☕&slug=elcynia&button_colour=FFDD00&font_colour=000000&font_family=Poppins&outline_colour=000000&coffee_colour=ffffff'
+                alt='Buy Me A Coffee'
+              />
+            </a>
           </div>
 
           {/* 버전 */}
