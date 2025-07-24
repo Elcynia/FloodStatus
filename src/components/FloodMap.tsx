@@ -106,7 +106,7 @@ export default function FloodMap() {
     if (riskLevel >= 0.95) return '#dc2626'; // 위험
     if (riskLevel >= 0.85) return '#fcd34d'; // 경계
     if (riskLevel >= 0.7) return '#fdba74'; // 주의
-    if (riskLevel >= 0.3) return '#40c057'; // 관심
+    if (riskLevel >= 0) return '#40c057'; // 안전
     return '#9ca3af'; // 데이터 없음
   };
 
@@ -539,7 +539,7 @@ export default function FloodMap() {
                 <div className='flex items-center gap-2 p-2 rounded-lg bg-green-50 border border-green-100 hover:bg-green-100 transition-colors duration-200'>
                   <div className='w-4 h-4 bg-[#40c057] rounded-full shadow-sm border-2 border-white'></div>
                   <div className='flex gap-2'>
-                    <span className='text-xs font-bold text-green-700'>관심</span>
+                    <span className='text-xs font-bold text-green-700'>안전</span>
                     <span className='text-xs text-green-600'>30%~</span>
                   </div>
                 </div>
@@ -646,7 +646,7 @@ export default function FloodMap() {
                                     icon: '⚡',
                                   };
                                 return {
-                                  level: '관심',
+                                  level: '안전',
                                   color: 'green',
                                   bgColor: 'bg-green-50',
                                   textColor: 'text-green-700',
