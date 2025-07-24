@@ -4,7 +4,7 @@ import { Link } from 'react-router';
 export default function Header() {
   return (
     <header className='w-full bg-gradient-to-r from-sky-600 to-sky-700 text-white shadow-xl border-b border-sky-500/20'>
-      <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4'>
+      <div className='max-w-[1400px] mx-auto px-4 sm:px-6 py-4'>
         <div className='flex items-center justify-between'>
           <Link to='/' className='flex items-center group'>
             <div className='p-2 bg-white/10 rounded-lg mr-3 group-hover:bg-white/20 transition-all duration-200'>
