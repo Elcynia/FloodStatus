@@ -31,6 +31,7 @@ export default function Footer() {
           {/* Copyright */}
           <div className='text-center md:text-left'>
             <p className='text-gray-700 text-sm font-medium'>© {CURRENT_YEAR} FloodStatus. All rights reserved.</p>
+            <p className='text-gray-500 text-xs mt-1'>자료출처: 서울 열린데이터 광장 (공공누리 제2유형, 비영리 이용)</p>
             <p className='text-gray-500 text-xs mt-2 flex items-center justify-center md:justify-start space-x-1'>
               <span>Made by</span>
               <span className='text-red-500'>❤️</span>
