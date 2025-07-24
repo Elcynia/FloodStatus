@@ -251,6 +251,15 @@ export default function FloodMap() {
     [riverDataCache, DISTRICT_RIVERS, fetchAllRiverDataOnce]
   );
 
+  // (모바일) 영역 클릭 시 자동 스크롤
+  useEffect(() => {
+    if (selectedDistrict && detailsRef.current && window.innerWidth < 1024) {
+      setTimeout(() => {
+        detailsRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }, 100);
+    }
+  }, [selectedDistrict]);
+
   // D3.js로 지도 그리기
   useEffect(() => {
     if (geoData && svgRef.current) {
@@ -423,11 +432,6 @@ export default function FloodMap() {
 
           // 하천 데이터
           fetchRealTimeRiverData(districtName);
-
-          // (모바일) 영역 클릭시 자동 스크롤
-          if (window.innerWidth < 1024 && detailsRef.current) {
-            detailsRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
-          }
 
           // 선택된 구역 하이라이트
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
