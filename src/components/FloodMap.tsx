@@ -4,36 +4,12 @@ import * as topojson from 'topojson-client';
 import axios from 'axios';
 import Footer from './Footer';
 import Header from './Header';
-
-// 타입 정의
-type RiverStation = {
-  GU_OFC_NM: string;
-  WATG_NM: string;
-  RLTM_RVR_WATL_CNT: string;
-  PLAN_FLDE: string;
-  DTRSM_DATA_CLCT_TM: string;
-};
-
-type SelectedDistrict = {
-  name: string;
-  coordinates: [number, number];
-  bounds: [[number, number], [number, number]];
-  area: number;
-};
-
-type RiverGroupData = {
-  riverName: string;
-  data: RiverStation[];
-};
-
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-type TopoJsonData = any;
-
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-type GeoFeatureCollection = any;
+import type { Topology } from 'topojson-specification';
+import type { FeatureCollection, GeoJsonProperties, Geometry } from 'geojson';
+import type { RiverGroupData, RiverStation, SelectedDistrict } from '../types/river';
 
 export default function FloodMap() {
-  const [geoData, setGeoData] = useState<TopoJsonData | null>(null);
+  const [geoData, setGeoData] = useState<Topology | null>(null);
   const [selectedDistrict, setSelectedDistrict] = useState<SelectedDistrict | null>(null);
   const [realTimeRiverData, setRealTimeRiverData] = useState<RiverGroupData[] | null>(null);
   const [districtRiskLevels, setDistrictRiskLevels] = useState<{ [key: string]: number }>({});
@@ -269,7 +245,8 @@ export default function FloodMap() {
       svg.selectAll('*').remove();
 
       // TopoJSON to GeoJSON
-      const features = topojson.feature(geoData, geoData.objects.seoul_EPSG5179) as GeoFeatureCollection;
+      const geoJsonResult = topojson.feature(geoData, geoData.objects.seoul_EPSG5179);
+      const features = geoJsonResult as FeatureCollection<Geometry, GeoJsonProperties>;
 
       // 지도 투영 설정
       const projection = d3.geoIdentity().reflectY(true).fitSize([dimensions.width, dimensions.height], features);
@@ -461,25 +438,20 @@ export default function FloodMap() {
       // 구역 이름 표시
       svg
         .selectAll('text')
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        .data((features as any).features)
+        .data(features.features)
         .enter()
         .append('text')
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        .attr('x', (d: any) => getTextX(d))
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        .attr('y', (d: any) => getTextY(d))
+        .attr('x', (d) => getTextX(d))
+        .attr('y', (d) => getTextY(d))
         .attr('text-anchor', 'middle')
         .attr('dominant-baseline', 'middle')
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        .attr('font-size', (d: any) => getFontSize(d))
-        .attr('font-family', 'Arial, sans-serif')
+        .attr('font-size', (d) => getFontSize(d))
+        .attr('font-family', 'Pretendard Variables')
         .attr('fill', '#333')
         .attr('font-weight', '500')
         .attr('pointer-events', 'none')
         .style('text-shadow', '1px 1px 2px rgba(255,255,255,0.9)')
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        .text((d: any) => d.properties.nm);
+        .text((d) => d.properties?.nm);
     }
   }, [geoData, selectedDistrict, districtRiskLevels, fetchRealTimeRiverData, dimensions]);
 
