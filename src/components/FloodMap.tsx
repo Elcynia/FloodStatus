@@ -670,10 +670,10 @@ export default function FloodMap() {
                                     </div>
                                   </div>
 
-                                  {/* 위험도 진행률 */}
+                                  {/* 위험률 진행률 */}
                                   <div className='mb-3'>
                                     <div className='flex justify-between text-xs text-gray-600 mb-1'>
-                                      <span>위험도</span>
+                                      <span>위험률</span>
                                       <span>{Math.round(riskRatio * 100)}%</span>
                                     </div>
                                     <div className='w-full bg-gray-200 rounded-full h-2'>
