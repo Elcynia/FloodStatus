@@ -13,7 +13,6 @@ export default function FloodMap() {
   const [selectedDistrict, setSelectedDistrict] = useState<SelectedDistrict | null>(null);
   const [realTimeRiverData, setRealTimeRiverData] = useState<RiverGroupData[] | null>(null);
   const [districtRiskLevels, setDistrictRiskLevels] = useState<{ [key: string]: number }>({});
-  const [isLoadingRiskData, setIsLoadingRiskData] = useState(false);
 
   const [riverDataCache, setRiverDataCache] = useState<{ [key: string]: RiverStation[] }>({});
   const [dimensions, setDimensions] = useState({ width: 800, height: 600 });
@@ -86,72 +85,9 @@ export default function FloodMap() {
     return '#9ca3af'; // 데이터 없음
   };
 
-  // TopoJSON
-  useEffect(() => {
-    axios
-      .get('/data/korea.json')
-      .then((response) => {
-        setGeoData(response.data);
-        // 지도 로드 후 백그라운드에서 위험도 계산 시작
-        calculateAllDistrictRiskLevelsOptimized();
-      })
-      .catch((error) => {
-        console.error('Error loading data:', error);
-      });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  const fetchAllRiverDataOnce = useCallback(async () => {
-    const BACKEND = import.meta.env.VITE_BACKEND_API;
-    const baseUrl = `${BACKEND}/api/river-stage`;
-
-    // 하천 목록
-    const allRivers = [
-      ...new Set([
-        '탄천',
-        '안양천',
-        '도림천',
-        '중랑천',
-        '목감천',
-        '우이천',
-        '방학천',
-        '한강',
-        '홍제천',
-        '불광천',
-        '청계천',
-      ]),
-    ];
-
-    const cache: { [key: string]: RiverStation[] } = {};
-
-    // 병렬로 모든 하천 데이터 가져오기
-    const riverPromises = allRivers.map(async (river) => {
-      try {
-        const {
-          data: { ListRiverStageService },
-        } = await axios.get(`${baseUrl}/${encodeURIComponent(river)}`);
-        cache[river] = ListRiverStageService?.row || [];
-        return { river, success: true };
-      } catch (error) {
-        console.error(error);
-        cache[river] = [];
-        return { river, success: false };
-      }
-    });
-
-    await Promise.all(riverPromises);
-    setRiverDataCache(cache);
-    return cache;
-  }, []);
-
-  // 최적화된 위험도 계산 함수
-  const calculateAllDistrictRiskLevelsOptimized = useCallback(async () => {
-    setIsLoadingRiskData(true);
-
-    try {
-      const cache = await fetchAllRiverDataOnce();
-
-      // 각 구의 위험도 계산
+  // 구별 위험도 계산 함수
+  const calculateDistrictRiskLevels = useCallback(
+    (cache: { [key: string]: RiverStation[] }) => {
       const districts = Object.keys(DISTRICT_RIVERS);
       const riskLevels: { [key: string]: number } = {};
 
@@ -167,9 +103,9 @@ export default function FloodMap() {
 
         rivers.forEach((river) => {
           const riverData = cache[river] || [];
-          const filteredData = riverData.filter((station: RiverStation) => station.GU_OFC_NM === district);
+          const districtStations = riverData.filter((station: RiverStation) => station.GU_OFC_NM === district);
 
-          filteredData.forEach((station: RiverStation) => {
+          districtStations.forEach((station: RiverStation) => {
             const currentLevel = parseFloat(station.RLTM_RVR_WATL_CNT);
             const floodLevel = parseFloat(station.PLAN_FLDE);
 
@@ -185,12 +121,68 @@ export default function FloodMap() {
       });
 
       setDistrictRiskLevels(riskLevels);
-    } catch (error) {
-      console.error('위험도 계산 실패:', error);
-    } finally {
-      setIsLoadingRiskData(false);
-    }
-  }, [DISTRICT_RIVERS, fetchAllRiverDataOnce]);
+    },
+    [DISTRICT_RIVERS]
+  );
+
+  const fetchAllRiverDataOnce = useCallback(async () => {
+    const BACKEND = import.meta.env.VITE_BACKEND_API;
+    const baseUrl = `${BACKEND}/api/river-stage`;
+
+    // 하천 목록
+    const ALL_RIVERS = [
+      '탄천',
+      '안양천',
+      '도림천',
+      '중랑천',
+      '목감천',
+      '우이천',
+      '방학천',
+      '한강',
+      '홍제천',
+      '불광천',
+      '청계천',
+    ];
+
+    const cache: { [key: string]: RiverStation[] } = {};
+
+    // 병렬로 모든 하천 데이터 가져오기
+    const riverPromises = ALL_RIVERS.map(async (river) => {
+      try {
+        const {
+          data: { ListRiverStageService },
+        } = await axios.get(`${baseUrl}/${encodeURIComponent(river)}`);
+        cache[river] = ListRiverStageService?.row || [];
+        return { river, success: true };
+      } catch (error) {
+        console.error(error);
+        cache[river] = [];
+        return { river, success: false };
+      }
+    });
+
+    await Promise.all(riverPromises);
+    setRiverDataCache(cache);
+
+    // 데이터 로딩 후 즉시 위험도 계산
+    calculateDistrictRiskLevels(cache);
+
+    return cache;
+  }, [calculateDistrictRiskLevels]);
+
+  // TopoJSON 데이터 로딩
+  useEffect(() => {
+    axios
+      .get('/data/korea.json')
+      .then((response) => {
+        setGeoData(response.data);
+        // 지도 로드 후 백그라운드에서 하천 데이터 로딩 및 위험도 계산
+        fetchAllRiverDataOnce();
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  }, [fetchAllRiverDataOnce]);
 
   // 실시간 하천 수위 API (캐시 활용)
   const fetchRealTimeRiverData = useCallback(
@@ -459,13 +451,6 @@ export default function FloodMap() {
     <>
       <Header />
       <div className='flex flex-col items-center p-3 sm:p-6 min-h-screen bg-gray-50'>
-        {/* 로딩 */}
-        {isLoadingRiskData && (
-          <div className='mb-4 px-3 sm:px-4 py-2 bg-blue-100 border border-blue-300 rounded-lg mx-2 sm:mx-0'>
-            <p className='text-blue-700 text-xs sm:text-sm'>🔄 하천 수위 데이터를 불러오는 중...</p>
-          </div>
-        )}
-
         <div className='flex flex-col lg:flex-row gap-4 lg:gap-12 w-full max-w-[1350px]'>
           <div className='flex flex-col w-full lg:w-auto'>
             <div className='flex justify-center'>
