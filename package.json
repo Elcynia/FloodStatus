@@ -12,6 +12,7 @@
   "dependencies": {
     "@tailwindcss/vite": "^4.1.11",
     "@types/geojson": "^7946.0.16",
+    "@types/react-helmet": "^6.1.11",
     "@vercel/analytics": "^1.5.0",
     "axios": "^1.10.0",
     "d3": "^7.9.0",
@@ -19,6 +20,7 @@
     "lucide-react": "^0.525.0",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
+    "react-helmet": "^6.1.0",
     "react-router": "^7.7.0",
     "tailwindcss": "^4.1.11",
     "topojson-client": "^3.1.0",
