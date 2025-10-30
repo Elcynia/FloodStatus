@@ -2,6 +2,7 @@ import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react-swc';
 import tailwindcss from '@tailwindcss/vite';
 import { VitePluginRadar } from 'vite-plugin-radar';
+import Sitemap from 'vite-plugin-sitemap';
 
 // https://vite.dev/config/
 export default defineConfig({
@@ -11,5 +12,6 @@ export default defineConfig({
     }),
     react(),
     tailwindcss(),
+    Sitemap({ hostname: 'https://floodstatus.vercel.app' }),
   ],
 });
